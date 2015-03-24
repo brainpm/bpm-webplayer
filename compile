@@ -9,8 +9,8 @@ contents.forEach(function(name) {
     var path = '../content/' + name;
     var m = require(path);
     allMeta[name] = m.getMeta();
-    var html = m.getHTML();
-    fs.writeFileSync('./build/' + name + '.html', html, 'utf-8');
+    //var html = m.getHTML();
+    //fs.writeFileSync('./build/' + name + '.html', html, 'utf-8');
 });
 
 
