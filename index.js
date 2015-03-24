@@ -1,15 +1,24 @@
 var EventEmitter = require('events').EventEmitter;
+var history = require('./history')('.sidebar .history');
 
 window.events = new EventEmitter();
 window.events.on('append_episode', function(track, meta, html) {
+    console.log('track',track);
     var container = document.querySelector('.track.' + track);
-    container = container || document.querySelector('.content');
+    if (container === null) {
+        container = document.querySelector('.content .intro');
+    }
 
     var div = document.createElement('div');
     div.classList.add('episode');
     div.setAttribute('name', meta.name);
     div.innerHTML = html;
     container.appendChild(div);
+    history.appendEpisode(meta);
+});
+
+window.events.on('history_clicked', function(meta) {
+    console.log('history click on', meta);
 });
 
 function loadAndAppendEpisode(name) {
@@ -22,5 +31,6 @@ function loadAndAppendEpisode(name) {
 }
 
 loadAndAppendEpisode('intro');
+loadAndAppendEpisode('tty');
 
 //window.events.emit('append_episode', 'black', {name: 'test'}, '<span>Hello World!</span>');
