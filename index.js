@@ -8,11 +8,10 @@ var getEpisodeURL = require('./urls').getEpisodeURL;
 var appendScriptTag = require('./jsonp');
 
 window.events.once('end_episode_discovery', function() {
+    console.log('episode discovery done.');
     window.events.on('append_episode', function(track, meta, html) {
-        var container = document.querySelector('.track.' + track);
-        if (container === null) {
-            container = document.querySelector('.content .intro');
-        }
+        console.log('appending episode');
+        var container = document.querySelector('.content');
 
         var div = document.createElement('div');
         div.classList.add('episode');
@@ -21,6 +20,7 @@ window.events.once('end_episode_discovery', function() {
         container.appendChild(div);
         history.appendEpisode(meta);
     });
+    loadAndAppendEpisode('intro');
 });
 
 window.events.on('history_clicked', function(meta) {
@@ -33,7 +33,6 @@ function loadAndAppendEpisode(name) {
     appendScriptTag(url);
 }
 
-//loadAndAppendEpisode('intro');
 //loadAndAppendEpisode('tty');
 //loadAndAppendEpisode('terminal-emulator');
 

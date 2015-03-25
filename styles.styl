@@ -1,3 +1,7 @@
+body
+    font: 13px/1.4 Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"
+
+
 img
   border: 1px solid white
   width: 100%
@@ -7,35 +11,40 @@ img
     display: flex
     flex-direction: row
 
+.episode
+    background-color: #f9f9f9
+    color: #393939
+    line-height: 1.5em
+    font: 13px/1.4em "Helvetica Neue", arial,freesans,clean,sans-serif;
+    margin: 2em 15em
+    padding: 2em
 .sidebar
-    width: 60em
+    width: 50em
 
 .history
     position: fixed
     top: 4em
+    
+    li
+        list-style: none
+        cursor: pointer
+        &:hover
+            background-color: #a0a0e0
 
-.track_viewport
+.topbar
+    color: #403030
+    opacity: 0.8
+    background-color: #e0e0e0
+    position: fixed
+    top: 0px
+    left: 0px
     width: 100%
-    overflow: scroll
+    height: 1em
+    padding: 5px
+    box-shadow: 2px 0px 4px rgba(0,0,0,0.5)
 
-.track_container
-    display: flex
-    flex-direction: row
-    flex-wrap: nowrap
-    align-items: flex-start
-    width: 2400px
+    span
+        margin: 0em .2em 
 
-.track
-    min-height: 200px
-    width: 30%
-    padding: 2em
- 
-.track
-    &.blue
-        background-color: blue
-
-    &.yellow
-        background-color: yellow
-
-    &.black
-        background-color: #dddddd
+.content
+    margin-top: 3em
