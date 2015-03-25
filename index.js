@@ -1,9 +1,11 @@
 var EventEmitter = require('events').EventEmitter;
 window.events = new EventEmitter();
 
-var history = require('./history')('.sidebar .history');
+var history = require('./history')('.sidebar .history ul');
 var topbar = require('./topbar')('.topbar');
 var discover = require('./discover');
+var feedback = require('./feedback');
+
 var getEpisodeURL = require('./urls').getEpisodeURL;
 var appendScriptTag = require('./jsonp');
 
@@ -18,7 +20,9 @@ window.events.once('end_episode_discovery', function() {
         div.setAttribute('name', meta.name);
         div.innerHTML = html;
         container.appendChild(div);
-        history.appendEpisode(meta);
+        feedback(div, function(r) {
+            history.appendEpisode(meta);
+        });
     });
     loadAndAppendEpisode('intro');
 });

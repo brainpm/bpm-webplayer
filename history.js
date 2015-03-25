@@ -1,6 +1,5 @@
 module.exports = function(selector) {
     var el = document.querySelector(selector);
-    el.innerHTML = '<ul></ul>';
 
     var api = {};
 
