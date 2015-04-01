@@ -10,7 +10,7 @@ module.exports = function(selector) {
     var numEpisodes = 0;
     var newestMoment = null;
 
-    window.events.on('discovered_episode', function(meta, last_update) {
+    window.events.on('discovered_episode', function(episode, last_update) {
         numEpisodes++;
         numEpisodesElement.innerHTML = '' + numEpisodes;
 

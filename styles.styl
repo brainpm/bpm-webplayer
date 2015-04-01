@@ -19,6 +19,30 @@ img
     margin: 2em 15em
     padding: 2em
 
+    .menu
+        display: flex
+        &>div
+            padding: 2em
+        &>.blue
+            background-color: rgba(0,0,255,.3)
+        &>.yellow
+            background-color: rgba(255,255,0,.3)
+        &>.black
+            background-color: rgba(0,0,0,0.3)
+
+        .choice
+            a
+                color: inherit
+            color: lightgray
+            ul.requires
+                color: red
+                display: inline-block
+            ul.provides
+                display: none
+        .choice[data-enabled]
+            color: black
+            ul.requires
+                display: none
 .sidebar
     position: fixed
     top: 4em

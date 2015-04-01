@@ -5,18 +5,19 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "sh -ac ' . ~/.bpmrc; beefy ./index.js --live --index=build/index.html --cwd=build -- -t envify'"
+    "server": "sh -ac 'source ~/.bpmrc; beefy ./index.js --live --index=build/index.html --cwd=build -- -t envify -t jadeify'"
   },
   "author": "Jan Bölsche",
   "license": "ISC",
   "devDependencies": {
+    "beefy": "^2.1.3",
     "browserify": "^9.0.3",
-    "stylus": "^0.50.0",
     "jade": "^1.9.2",
-    "beefy": "^2.1.3"
+    "envify": "^3.4.0",
+    "jadeify": "^4.1.0",
+    "stylus": "^0.50.0"
   },
   "dependencies": {
-    "envify": "^3.4.0",
     "events": "^1.0.2",
     "moment": "^2.9.0"
   }

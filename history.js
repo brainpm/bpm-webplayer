@@ -5,8 +5,8 @@ module.exports = function(selector) {
 
     api.appendEpisode = function(episode) {
         var li = document.createElement('li');
-        li.setAttribute('title', episode.description);
-        li.innerHTML = episode.name;
+        li.setAttribute('title', episode.pkg.description);
+        li.innerHTML = episode.pkg.name;
         el.appendChild(li);
         li.addEventListener('click', function() {
             window.events.emit('history_clicked', episode);
