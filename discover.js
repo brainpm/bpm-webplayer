@@ -1,7 +1,8 @@
 var appendScriptTag = require('./jsonp');
 var getEpisodeURL = require('./urls').getEpisodeURL;
 
-var listReposUrl = "https://api.github.com/orgs/shecodes-content/repos?callback=repoCallback&type=public";
+var github_organisation = process.env.github_organisation;
+var listRepoUrl = "https://api.github.com/orgs/" + github_organisation + "/repos?callback=repoCallback&type=public";
 
 window.repoCallback = function(o) {
     if (o.meta.status !==  200) {
@@ -33,4 +34,4 @@ window.repoCallback = function(o) {
     }
 };
 
-appendScriptTag(listReposUrl);
+appendScriptTag(listRepoUrl);

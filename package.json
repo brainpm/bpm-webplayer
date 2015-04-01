@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "beefy ./index.js --live --index=build/index.html --cwd=build"
+    "server": "sh -ac ' . ~/.bpmrc; beefy ./index.js --live --index=build/index.html --cwd=build -- -t envify'"
   },
   "author": "Jan Bölsche",
   "license": "ISC",
@@ -16,6 +16,7 @@
     "beefy": "^2.1.3"
   },
   "dependencies": {
+    "envify": "^3.4.0",
     "events": "^1.0.2",
     "moment": "^2.9.0"
   }

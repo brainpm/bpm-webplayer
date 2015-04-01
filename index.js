@@ -25,6 +25,8 @@ window.events.once('end_episode_discovery', function() {
         });
     });
     loadAndAppendEpisode('intro');
+    loadAndAppendEpisode('tty');
+    loadAndAppendEpisode('terminal-emulator');
 });
 
 window.events.on('history_clicked', function(meta) {
@@ -37,6 +39,4 @@ function loadAndAppendEpisode(name) {
     appendScriptTag(url);
 }
 
-//loadAndAppendEpisode('tty');
-//loadAndAppendEpisode('terminal-emulator');
 
