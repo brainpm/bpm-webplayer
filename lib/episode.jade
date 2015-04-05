@@ -1,0 +1,7 @@
+.header
+    span.name= model.pkg.name + " version " + model.pkg.version
+    span.author=  "written by " + model.pkg.author.replace(/\s+<.*/,'')
+    span.updated_at= "last updated " + moment(model.repo.updated_at).fromNow()
+.body!= content
+.footer
+    span.license= "license: " + model.pkg.license + " " + moment(model.repo.updated_at).format("YYYY")
