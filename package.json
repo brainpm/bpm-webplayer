@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "events": "^1.0.2",
-    "moment": "^2.9.0"
+    "moment": "^2.9.0",
+    "spin": "0.0.1"
   }
 }
