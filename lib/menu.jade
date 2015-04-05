@@ -1,12 +1,17 @@
 .menu
-    each track in tracks
-        div(class=track)
-            each episode in menu[track]
-                .choice(data-enabled=episode.enabled)
-                    a(href=episode.pkg.name)= episode.pkg.name
-                    ul.provides
-                        each p in episode.pkg.brain.provides || []
-                            li= p
-                    ul.requires
-                        each p in episode.pkg.brain.requires || []
-                            li= p
+    ul.tracks
+        each track in tracks
+            li(class=track)
+                h1= track
+                ul.choices
+                    each episode in menu[track]
+                        li.choice(data-enabled=episode.enabled)
+                            button= episode.pkg.name
+                            if episode.pkg.description
+                                .description= " – " + episode.pkg.description
+                            ul.provides
+                                each p in episode.pkg.brain.provides || []
+                                    li= p
+                            ul.requires
+                                each p in episode.pkg.brain.requires || []
+                                    li= p
