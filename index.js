@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 var EventEmitter = require('events').EventEmitter;
 window.events = new EventEmitter();
 
@@ -7,6 +9,7 @@ var topbar = require('./lib/topbar')('.topbar');
 var discover = require('./lib/discover');
 var episode = require('./lib/episode');
 var appendMenu = require('./lib/menu').appendMenu;
+var bpm = require('brainpm');
 
 var Spinner = require('spin');
 
@@ -35,8 +38,14 @@ window.events.on('finished_episode', function(model) {
 window.events.on('episode_chosen', function(e) {
     var model = e.episode;
     console.log('user chose', model.pkg.name);
-    e.menu.parentElement.removeChild(e.menu);
-    loadAndAppendEpisode(model.pkg.name);
+    // is this a valid option?
+    var options = bpm.getOptions(TOC, inventory.knowledge());
+    if (_.some(options, function(o) {return o.pkg.name === model.pkg.name;})) {
+        e.menu.parentElement.removeChild(e.menu);
+        loadAndAppendEpisode(model.pkg.name);
+    } else {
+       // TODO: display 'you are not ready yet' 
+    }
 });
 
 function loadAndAppendEpisode(name) {
