@@ -6,7 +6,7 @@ var inventory = require('./lib/inventory')('.sidebar .inventory ul');
 var topbar = require('./lib/topbar')('.topbar');
 var discover = require('./lib/discover');
 var episode = require('./lib/episode');
-var getMenuHTML = require('./lib/menu').getMenuHTML;
+var appendMenu = require('./lib/menu').appendMenu;
 
 var Spinner = require('spin');
 
@@ -28,9 +28,15 @@ window.events.on('history_clicked', function(episode) {
 window.events.on('finished_episode', function(model) {
     history.appendEpisode(model);
     inventory.addKnowledge(model.pkg.brain.provides || []);
-    var menuHTML = getMenuHTML(TOC, history.visited(), inventory.knowledge(), TRACKS, 4); 
     var div = document.querySelector('.episode[name='+ model.pkg.name +']');
-    div.innerHTML += menuHTML;
+    appendMenu(div, TOC, history.visited(), inventory.knowledge(), TRACKS, 4); 
+});
+
+window.events.on('episode_chosen', function(e) {
+    var model = e.episode;
+    console.log('user chose', model.pkg.name);
+    e.menu.parentElement.removeChild(e.menu);
+    loadAndAppendEpisode(model.pkg.name);
 });
 
 function loadAndAppendEpisode(name) {

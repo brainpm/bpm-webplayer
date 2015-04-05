@@ -6,7 +6,7 @@
                 ul.choices
                     each episode in menu[track]
                         li.choice(data-enabled=episode.enabled)
-                            button= episode.pkg.name
+                            button(name=episode.pkg.name)= episode.pkg.name
                             if episode.pkg.description
                                 .description= " – " + episode.pkg.description
                             ul.provides
