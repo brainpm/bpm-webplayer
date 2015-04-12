@@ -11,6 +11,8 @@ var episode = require('./lib/episode');
 var appendMenu = require('./lib/menu').appendMenu;
 var bpm = require('brainpm');
 
+var scrollToY = require('scroll-to-y');
+
 var Spinner = require('spin');
 
 var TOC = {};
@@ -26,6 +28,9 @@ window.events.once('end_episode_discovery', function(toc) {
 
 window.events.on('history_clicked', function(episode) {
     console.log('history click on', episode.pkg.name);
+    var el = document.querySelector('.episode[name=' + episode.pkg.name + ']');
+    var ypos = el.offsetTop;
+    scrollToY(ypos, 1500, 'easeInOutQuint');
 });
 
 window.events.on('finished_episode', function(model) {
