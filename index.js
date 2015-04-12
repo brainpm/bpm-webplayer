@@ -10,6 +10,7 @@ var discover = require('./lib/discover');
 var episode = require('./lib/episode');
 var appendMenu = require('./lib/menu').appendMenu;
 var bpm = require('brainpm');
+var Spinner = require('spin');
 
 var scrollToY = require('scroll-to-y');
 
@@ -17,6 +18,16 @@ var Spinner = require('spin');
 
 var TOC = {};
 var TRACKS = process.env.tracks.split(':');
+
+var discoverySpinner = null;
+window.events.on('start_episode_discovery', function() {
+    discoverySpinner = new Spinner({color:'#111', lines: 12});
+    var container = document.querySelector('.container');
+    discoverySpinner.spin(container);
+});
+window.events.on('end_episode_discovery', function() {
+    discoverySpinner.stop();
+});
 
 window.events.once('end_episode_discovery', function(toc) {
     TOC = toc;
