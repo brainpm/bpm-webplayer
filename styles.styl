@@ -46,6 +46,9 @@ img
         position relative
         top -1em
 
+    .footer
+        margin-bottom 1em
+
     .menu
         ul
             padding 0 0
@@ -124,16 +127,18 @@ img
             background-color: #a0a0e0
 
 .topbar
-    color: #403030
-    opacity: 0.8
-    background-color: #e0e0e0
+    z-index 10
+    background-color: base2()
     position: fixed
     top: 0px
     left: 0px
     width: 100%
-    height: 1em
-    padding: 5px
-    box-shadow: 2px 0px 4px rgba(0,0,0,0.5)
+    height: 3em
+    box-shadow: 1px 0px 2px rgba(0,0,0,0.5)
+    align-items center
+    display flex
+    flex-direction row
+    justify-content flex-start
 
     span
         margin: 0em .2em 
@@ -141,10 +146,13 @@ img
 .content
     margin-top: 3em
 
-.button
-    background-color: #697EBA
+button
+    background-color: sviolet()
     display: inline-block
     padding: .5em
     margin-top: .5em
-    color: #eeeeee
+    color: base2()
+    border none
     cursor: pointer
+    &:hover
+        color: base3()
