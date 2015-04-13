@@ -16,17 +16,32 @@ img
 
 .episode
     min-height 4em
-    min-width 4em
+    min-width 20em
+    max-width: 50em
     background-color base2() 
     line-height 1.5em
     font 13px/1.4em "Helvetica Neue", arial,freesans,clean,sans-serif;
-    margin 2em 15em
+    margin-left 15em
+    margin-top 2em
+    margin-bottom 2em
     padding 2em
+    padding-top 0em
 
+    .bookmark
+        position: relative;
+        top: -.25em;
+        text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+        
     .header, .footer
         color: base1()
         span:not(:last-child)::after
             content: ', '
+    .header
+        display inline
+        margin-left 2em
+        position relative
+        top -1em
+
     .menu
         ul
             padding 0 0
