@@ -17,7 +17,18 @@ var scrollToY = require('scroll-to-y');
 var Spinner = require('spin');
 
 var TOC = {};
-var TRACKS = process.env.tracks.split(':');
+var TRACKS = [];
+var TRACK_NAMES = [];
+
+function configure() {
+    var tracks = process.env.tracks.split('::');
+    console.log(tracks);
+    _.forEach(tracks, function(t) {
+        TRACKS.push(t.split(':')[0]);
+        TRACK_NAMES.push(t.split(':')[1]);
+    });
+}
+configure();
 
 var discoverySpinner = null;
 window.events.on('start_episode_discovery', function() {
@@ -48,7 +59,7 @@ window.events.on('finished_episode', function(model) {
     history.appendEpisode(model);
     inventory.addKnowledge(model.pkg.brain.provides || []);
     var div = document.querySelector('.episode[name='+ model.pkg.name +']');
-    appendMenu(div, TOC, history.visited(), inventory.knowledge(), TRACKS, 4); 
+    appendMenu(div, TOC, history.visited(), inventory.knowledge(), TRACKS, TRACK_NAMES, 4); 
 });
 
 window.events.on('episode_chosen', function(e) {

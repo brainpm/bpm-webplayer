@@ -1,8 +1,9 @@
 .menu
     ul.tracks
+        - var trackIndex = 0
         each track in tracks
             li(class=track)
-                h1= track
+                h1= trackNames[trackIndex++]
                 ul.choices
                     each episode in menu[track]
                         li.choice(data-enabled=episode.enabled)
