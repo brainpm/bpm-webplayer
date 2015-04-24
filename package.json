@@ -22,6 +22,7 @@
     "events": "^1.0.2",
     "lodash": "^3.6.0",
     "moment": "^2.9.0",
+    "raf-scroll": "^1.0.1",
     "scroll-to-y": "^1.0.0",
     "spin": "0.0.1"
   }
