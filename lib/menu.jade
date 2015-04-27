@@ -7,12 +7,14 @@
                 ul.choices
                     each episode in menu[track]
                         li.choice(data-enabled=episode.enabled)
+                            - if (episode.enabled)
+                                i.fa.fa-unlock-alt
+                            - else
+                                i.fa.fa-lock
+
                             button(name=episode.pkg.name)= episode.pkg.name
                             if episode.pkg.description
                                 .description= " – " + episode.pkg.description
                             ul.provides
                                 each p in episode.pkg.brain.provides || []
-                                    li= p
-                            ul.requires
-                                each p in episode.pkg.brain.requires || []
                                     li= p
