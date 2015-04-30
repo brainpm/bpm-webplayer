@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "sh -ac 'source ~/.bpmrc; beefy ./index.js --live --index=build/index.html --cwd=build -- -t envify -t jadeify'"
+    "server": "sh -ac 'source ~/.bpmrc; beefy ./index.js --index=build/index.html --cwd=build -- -t envify -t jadeify'"
   },
   "author": "Jan Bölsche",
   "license": "ISC",
@@ -20,6 +20,10 @@
   },
   "dependencies": {
     "events": "^1.0.2",
+    "level-js": "^2.1.6",
+    "level-live-stream": "^1.4.9",
+    "level-sublevel": "^6.4.6",
+    "levelup": "^0.19.0",
     "lodash": "^3.6.0",
     "moment": "^2.9.0",
     "raf-scroll": "^1.0.1",

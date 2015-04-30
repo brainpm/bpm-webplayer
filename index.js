@@ -3,7 +3,15 @@ var _ = require('lodash');
 var EventEmitter = require('events').EventEmitter;
 window.events = new EventEmitter();
 
-var history = require('./lib/history')('.sidebar .history ul');
+var levelup = require('levelup');
+var leveldown = require('level-js');
+var sublevel = require('level-sublevel');
+var history, logdb;
+var db = levelup('brainpm', { db: leveldown }, function() {
+    logdb = sublevel(db, 'log');
+    history = require('./lib/history')('.sidebar .history ul', logdb);
+});
+
 var inventory = require('./lib/inventory')('.sidebar .inventory ul');
 var topbar = require('./lib/topbar')('.topbar');
 var discover = require('./lib/discover');
@@ -66,11 +74,9 @@ function ensureVisible(el) {
     // if top is negative, we need to scroll down
     // if top + height > viewport.height, we need to scroll up
     // if both is true, we scroll up
-    console.log('ENSURE',el,bounds);
+    //console.log('ENSURE',el,bounds);
     var clientHeight = document.querySelector('html').clientHeight;
-    console.log(clientHeight);
     var deltaBottom = bounds.bottom - clientHeight;
-    console.log('delta', deltaBottom);
     if (deltaBottom > 0) {
         scrollToY(window.scrollY + deltaBottom);
     } else if (bounds.top < 0) {
@@ -79,6 +85,9 @@ function ensureVisible(el) {
 }
 
 window.events.on('finished_episode', function(model) {
+    logdb.put('finished!'+(new Date()).toISOString(), model.pkg.name + '@' + model.pkg.version, function(err) {
+        console.log('PUT', err);
+    }); 
     inventory.addKnowledge(model.pkg.brain.provides || []);
     var div = document.querySelector('.episode[name='+ model.pkg.name +']');
     appendMenu(div, TOC, history.visited(), inventory.knowledge(), TRACKS, TRACK_NAMES, 4); 
