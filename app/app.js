@@ -9,14 +9,14 @@ var sublevel = require('level-sublevel');
 var history, logdb;
 var db = levelup('brainpm', { db: leveldown }, function() {
     logdb = sublevel(db, 'log');
-    history = require('./lib/history')('.sidebar .history ul', logdb);
+    history = require('history/history')('.sidebar .history ul', logdb);
 });
 
-var inventory = require('./lib/inventory')('.sidebar .inventory ul');
-var topbar = require('./lib/topbar')('.topbar');
-var discover = require('./lib/discover');
-var episode = require('./lib/episode');
-var appendMenu = require('./lib/menu').appendMenu;
+var inventory = require('inventory/inventory')('.sidebar .inventory ul');
+var topbar = require('topbar/topbar')('.topbar');
+var discover = require('discover/discover');
+var episode = require('episode/episode');
+var appendMenu = require('menu/menu').appendMenu;
 var bpm = require('brainpm');
 var Spinner = require('spin');
 

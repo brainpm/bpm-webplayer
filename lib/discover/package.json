@@ -1,0 +1,12 @@
+{
+  "name": "discover",
+  "version": "1.0.0",
+  "description": "",
+  "main": "discover.js",
+  "browserify": { "transform": ["envify"]},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jan Bölsche <jan@lagomorph.de> (http://regular.codes)",
+  "license": "ISC"
+}

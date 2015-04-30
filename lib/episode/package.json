@@ -1,0 +1,12 @@
+{
+  "name": "episode",
+  "version": "1.0.0",
+  "description": "",
+  "main": "episode.js",
+  "browserify": { "transform": ["jadeify"]},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jan Bölsche <jan@lagomorph.de> (http://regular.codes)",
+  "license": "ISC"
+}
