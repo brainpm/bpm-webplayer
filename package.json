@@ -1,5 +1,5 @@
 {
-  "name": "player",
+  "name": "brainpm-webplayer",
   "version": "1.0.0",
   "description": "a package-manager-for-the-brain content player",
   "main": "app/app.js",
