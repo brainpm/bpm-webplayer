@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "sh -ac 'source ~/.bpmrc; beefy app/app.js --index=build/index.html --cwd=build -- -t envify'"
+    "server": "sh -ac '. ~/.bpmrc; beefy app/app.js --index=build/index.html --cwd=build -- -t envify'"
   },
   "author": "Jan Bölsche",
   "license": "ISC",
