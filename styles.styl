@@ -1,16 +1,4 @@
-@import 'node_modules/css-colors-solarized/styles/colors-solarized'
-
 SIDEBAR_WIDTH=18em
-
-body
-    font: 13px/1.4 Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"
-    color: base02() 
-    background-color: base3()
-
-img
-  border: 1px solid white
-  width: 100%
-  box-shadow: 1px 1px 8px rgba(0,0,0,0.3)
 
 .horizontal_container
     display: flex
@@ -20,33 +8,19 @@ img
     min-height 4em
     min-width 20em
     max-width: 50em
-    background-color base2() 
-    line-height 1.5em
-    font 13px/1.4em "Helvetica Neue", arial,freesans,clean,sans-serif;
     margin-left SIDEBAR_WIDTH + 3em
     margin-top 2em
     margin-bottom 2em
     padding 2em
     padding-top 0em
 
-    .bookmark
-        position: relative;
-        top: -.25em;
-        text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
-    &.blue .bookmark
-        color: sblue()
-    &.yellow .bookmark
-        color: syellow()
-
     .header, .footer
-        color: base1()
         span:not(:last-child)::after
             content: ', '
     .header
         display inline
         margin-left 2em
         position relative
-        top -1em
 
     .footer
         margin-bottom 1em
@@ -66,37 +40,21 @@ img
                 h1
                     font-size: 1.6em
                     padding .2em
-                    color base3()
 
-                &.blue
-                    h1
-                        background-color: sblue() 
-                &.yellow
-                    h1
-                        background-color: syellow() 
-                &.black
-                    h1
-                        background-color: base03()
             ul.choices
                 list-style none
                 button
-                    border none
                     background-color inherit
                     font-size inherit
-                    &:hover
-                        background-color sviolet(.5)
 
                 li.choice // disabled
                     margin-bottom .4em
-                    color: base00()
                     button
                         color inherit 
                         text-decoration: none
                     .description
                         display none
-                        color base0()
                     ul.requires
-                        color sred()
                         &::before
                             content "(requires knowledge you don't have yet: "
                         &::after
@@ -110,10 +68,8 @@ img
                         display none
 
                 li.choice[data-enabled]
-                    color base03()
                     .description
                         display inline
-                        color base01()
                     ul.requires
                         display: none
 .sidebar
@@ -131,17 +87,13 @@ img
         li
             margin 0.15em
             padding 0
-            background-color base01()
             border-radius 4px
-            color base2()
             span
                 padding 0.01em 0.3em
             i
                 padding 4px 2px
                 border-top-left-radius 4px
                 border-bottom-left-radius 4px
-                background-color syellow()
-                color white
 .history   
     ul
         padding-left 0em
@@ -149,8 +101,6 @@ img
     li
         list-style: none
         cursor: pointer
-        &:hover
-            background-color: scyan() 
 
         i
             padding-right .4em
@@ -162,13 +112,11 @@ img
             
 .topbar
     z-index 10
-    background-color: base2()
     position: fixed
     top: 0px
     left: 0px
     width: 100%
     height: 3em
-    box-shadow: 1px 0px 2px rgba(0,0,0,0.5)
     align-items center
     display flex
     flex-direction row
@@ -181,12 +129,8 @@ img
     margin-top: 3em
 
 button
-    background-color: sviolet()
     display: inline-block
     padding: .5em
     margin-top: .5em
-    color: base2()
     border none
     cursor: pointer
-    &:hover
-        color: base3()

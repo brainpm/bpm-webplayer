@@ -24,7 +24,6 @@
   },
   "dependencies": {
     "brainpm": "^1.9.1",
-    "css-colors-solarized": "^0.9.2",
     "events": "^1.0.2",
     "level-js": "^2.1.6",
     "level-live-stream": "^1.4.9",
