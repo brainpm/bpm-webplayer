@@ -47,11 +47,21 @@ SIDEBAR_WIDTH=18em
                     background-color inherit
                     font-size inherit
 
-                li.choice // disabled
+                li.choice // enabled
+                    .description
+                        display inline
+                    ul.requires
+                        display: none
                     margin-bottom .4em
                     button
                         color inherit 
                         text-decoration: none
+                    ul.provides
+                        display none
+
+                li.choice[data-disabled]
+                    button
+                        cursor: default
                     .description
                         display none
                     ul.requires
@@ -64,14 +74,6 @@ SIDEBAR_WIDTH=18em
                             display inline
                             &:not(:last-child)::after
                                 content: ", "
-                    ul.provides
-                        display none
-
-                li.choice[data-enabled]
-                    .description
-                        display inline
-                    ul.requires
-                        display: none
 .sidebar
     position: fixed
     top: 4em

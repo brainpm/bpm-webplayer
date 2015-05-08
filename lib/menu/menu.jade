@@ -6,7 +6,7 @@
                 h1= trackNames[trackIndex++]
                 ul.choices
                     each episode in menu[track]
-                        li.choice(data-enabled=episode.enabled)
+                        li.choice(data-disabled=!episode.enabled)
                             - if (episode.enabled)
                                 i.fa.fa-unlock-alt
                             - else
