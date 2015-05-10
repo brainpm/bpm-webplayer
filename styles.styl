@@ -25,6 +25,39 @@ SIDEBAR_WIDTH=18em
     .footer
         margin-bottom 1em
 
+    .body .video
+        background-color lightgray
+        padding .1em
+
+    .body .video .credits
+        display flex
+        flex-wrap wrap
+        font-size: 75%
+        span
+            margin-left .2em
+            white-space no-wrap
+        span:first-child
+            margin-left 0
+        .title
+            order 1
+            &:before
+                content open-quote
+            &:after
+                content close-quote
+
+        .publishedAt
+            order 2
+            &:before
+                content: "published on "
+        .channel
+            order 3
+            &:before
+                content: "by "
+        .license
+            order 4
+            &:before
+                content: "license: "
+
     .menu
         ul
             padding 0 0
