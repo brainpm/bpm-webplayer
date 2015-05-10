@@ -33,12 +33,19 @@ function ensureVisible(el) {
     }
 }
 
-function init() {
+function init(config) {
+    if (typeof(config) === "undefined") {
+        config = {};
+    }
+    _.defaults(config, {
+        tracks: process.env.tracks, 
+        github_organisation: process.env.github_organisation
+    });
     var EventEmitter = require('events').EventEmitter;
     window.events = new EventEmitter();
     //
     // app-specific modules
-    var discover = require('discover/discover');
+    require('discover/discover')(config.github_organisation);
     var episode = require('episode/episode');
     var appendMenu = require('menu/menu').appendMenu;
     var bpm = require('brainpm');
@@ -67,7 +74,7 @@ function init() {
     var history, logdb;
     var discoverySpinner = null;
 
-    var tracks = process.env.tracks.split('::');
+    var tracks = config.tracks.split('::');
     console.log(tracks);
     _.forEach(tracks, function(t) {
         TRACKS.push(t.split(':')[0]);
