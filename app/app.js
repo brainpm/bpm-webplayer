@@ -8,6 +8,8 @@ var leveldown = require('level-js');
 var sublevel = require('level-sublevel');
 
 // helpers
+
+
 var scrollToY = function(y) {
     require('scroll-to-y')(y, 1500, 'easeInOutQuint');
 };
@@ -62,7 +64,10 @@ function init(config) {
             container, model, 
             function(err) {
                 if (err) return;
-                history.appendEpisode(model);
+                //history.appendEpisode(model);
+                makeLogEntry("started_episode", model, function(err) {
+                    console.log('PUT', err);
+                });
                 scrollToEpisode(model.pkg.name);
             }
         );
@@ -91,6 +96,21 @@ function init(config) {
         );
     });
     
+    function makeLogEntry(action, model, cb) {
+        logdb.put(
+            (new Date()).toISOString(), 
+            JSON.stringify({
+                action: action,
+                pkg: {
+                    name: model.pkg.name, 
+                    version: model.pkg.version, 
+                    description: model.pkg.description,
+                    brain: model.pkg.brain
+                }
+            }),
+            cb
+        );
+    }
     //
     // -- add event listeners
     //
@@ -121,13 +141,9 @@ function init(config) {
     });
 
     e.on('finished_episode', function(model) {
-        logdb.put(
-            'finished!'+(new Date()).toISOString(), 
-            model.pkg.name + '@' + model.pkg.version, 
-            function(err) {
-                console.log('PUT', err);
-            })
-        ; 
+        makeLogEntry("finished_episode", model, function(err) {
+            console.log('PUT', err);
+        });
         inventory.addKnowledge(
             model.pkg.brain.provides || []
         );
