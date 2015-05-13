@@ -53,9 +53,6 @@ function init(config) {
     var bpm = require('brainpm');
     
     // app-specific UI components
-    var inventory = require('inventory/inventory')(
-            '.sidebar .inventory ul'
-    );
     var topbar = require('topbar/topbar')('.topbar');
 
     function loadAndAppendEpisode(model) {
@@ -65,7 +62,7 @@ function init(config) {
             function(err) {
                 if (err) return;
                 //history.appendEpisode(model);
-                makeLogEntry("started_episode", model, function(err) {
+                makeEpisodeLogEntry("started_episode", model, function(err) {
                     console.log('PUT', err);
                 });
                 scrollToEpisode(model.pkg.name);
@@ -76,7 +73,7 @@ function init(config) {
     var TOC = {};
     var TRACKS = [];
     var TRACK_NAMES = [];
-    var history, logdb;
+    var history, inventory, logdb;
     var discoverySpinner = null;
 
     var tracks = config.tracks.split('::');
@@ -94,11 +91,15 @@ function init(config) {
             '.sidebar .history ul', 
             logdb
         );
+        inventory = require('inventory/inventory')(
+            '.sidebar .inventory ul',
+            logdb
+        );
     });
     
-    function makeLogEntry(action, model, cb) {
+    function makeEpisodeLogEntry(action, model, cb) {
         logdb.put(
-            (new Date()).toISOString(), 
+            (new Date()).toISOString(),
             JSON.stringify({
                 action: action,
                 pkg: {
@@ -110,6 +111,23 @@ function init(config) {
             }),
             cb
         );
+    }
+
+    function makeKnowledgeLogEntry(model, cb) {
+         var date = (new Date()).toISOString();
+         var i = 0;
+         var batch = model.pkg.brain.provides.map(function(item) {
+            console.log ("added " + item + " to database");
+            return {
+                type: 'put', 
+                key: date+((i++).toString(16)), 
+                value: JSON.stringify({
+                    action: "knowledge_acquired", 
+                    provides: item
+                })
+            };
+         });
+        logdb.batch(batch, cb);
     }
     //
     // -- add event listeners
@@ -141,12 +159,12 @@ function init(config) {
     });
 
     e.on('finished_episode', function(model) {
-        makeLogEntry("finished_episode", model, function(err) {
-            console.log('PUT', err);
+        makeEpisodeLogEntry("finished_episode", model, function(err) {
+            console.log('finished episode log entry', err);
         });
-        inventory.addKnowledge(
-            model.pkg.brain.provides || []
-        );
+        makeKnowledgeLogEntry(model, function(err) {
+            console.log('knowledge log entry written', err);
+        });
         var div = document.querySelector(
             '.episode[name='+ model.pkg.name +']'
         );
