@@ -8,6 +8,8 @@ var leveldown = require('level-js');
 var sublevel = require('level-sublevel');
 
 // helpers
+
+
 var scrollToY = function(y) {
     require('scroll-to-y')(y, 1500, 'easeInOutQuint');
 };
@@ -51,9 +53,6 @@ function init(config) {
     var bpm = require('brainpm');
     
     // app-specific UI components
-    var inventory = require('inventory/inventory')(
-            '.sidebar .inventory ul'
-    );
     var topbar = require('topbar/topbar')('.topbar');
 
     function loadAndAppendEpisode(model) {
@@ -62,7 +61,10 @@ function init(config) {
             container, model, 
             function(err) {
                 if (err) return;
-                history.appendEpisode(model);
+                //history.appendEpisode(model);
+                makeEpisodeLogEntry("started_episode", model, function(err) {
+                    console.log('PUT', err);
+                });
                 scrollToEpisode(model.pkg.name);
             }
         );
@@ -71,7 +73,7 @@ function init(config) {
     var TOC = {};
     var TRACKS = [];
     var TRACK_NAMES = [];
-    var history, logdb;
+    var history, inventory, logdb;
     var discoverySpinner = null;
 
     var tracks = config.tracks.split('::');
@@ -89,8 +91,44 @@ function init(config) {
             '.sidebar .history ul', 
             logdb
         );
+        inventory = require('inventory/inventory')(
+            '.sidebar .inventory ul',
+            logdb
+        );
     });
     
+    function makeEpisodeLogEntry(action, model, cb) {
+        logdb.put(
+            (new Date()).toISOString(),
+            JSON.stringify({
+                action: action,
+                pkg: {
+                    name: model.pkg.name, 
+                    version: model.pkg.version, 
+                    description: model.pkg.description,
+                    brain: model.pkg.brain
+                }
+            }),
+            cb
+        );
+    }
+
+    function makeKnowledgeLogEntry(model, cb) {
+         var date = (new Date()).toISOString();
+         var i = 0;
+         var batch = model.pkg.brain.provides.map(function(item) {
+            console.log ("added " + item + " to database");
+            return {
+                type: 'put', 
+                key: date+((i++).toString(16)), 
+                value: JSON.stringify({
+                    action: "knowledge_acquired", 
+                    provides: item
+                })
+            };
+         });
+        logdb.batch(batch, cb);
+    }
     //
     // -- add event listeners
     //
@@ -121,16 +159,12 @@ function init(config) {
     });
 
     e.on('finished_episode', function(model) {
-        logdb.put(
-            'finished!'+(new Date()).toISOString(), 
-            model.pkg.name + '@' + model.pkg.version, 
-            function(err) {
-                console.log('PUT', err);
-            })
-        ; 
-        inventory.addKnowledge(
-            model.pkg.brain.provides || []
-        );
+        makeEpisodeLogEntry("finished_episode", model, function(err) {
+            console.log('finished episode log entry', err);
+        });
+        makeKnowledgeLogEntry(model, function(err) {
+            console.log('knowledge log entry written', err);
+        });
         var div = document.querySelector(
             '.episode[name='+ model.pkg.name +']'
         );
