@@ -23,7 +23,7 @@
     "stylus": "^0.50.0"
   },
   "dependencies": {
-    "brainpm": "^1.9.1",
+    "brainpm": "2.x.x",
     "events": "^1.0.2",
     "level-js": "^2.1.6",
     "level-live-stream": "^1.4.9",
