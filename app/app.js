@@ -53,17 +53,18 @@ function init(config) {
     // app-specific UI components
     var topbar = require('topbar/topbar')('.topbar');
 
-    function loadAndAppendEpisode(model) {
+    function loadAndAppendEpisode(model, cb) {
         var container = document.querySelector('.content');
         episode.appendEpisode(
             container, model,
             function(err) {
                 if (err) return;
                 //history.appendEpisode(model);
+                scrollToEpisode(model.pkg.name);
                 makeEpisodeLogEntry("started_episode", model, function(err) {
                     console.log('PUT', err);
+                    if (cb) cb(null);
                 });
-                scrollToEpisode(model.pkg.name);
             }
         );
     }
@@ -171,32 +172,32 @@ function init(config) {
     e.on('finished_episode', function(model) {
         makeEpisodeLogEntry("finished_episode", model, function(err) {
             console.log('finished episode log entry', err);
+            makeKnowledgeLogEntry(model, function(err) {
+                console.log('knowledge log entry written', err);
+                var div = document.querySelector(
+                    '.episode[name='+ model.pkg.name +']'
+                );
+                console.log('history.visited', history.visited());
+                console.log('inventory.knowledge', inventory.knowledge());
+                insertMenuIntoEpisode(div);
+            });
         });
-        makeKnowledgeLogEntry(model, function(err) {
-            console.log('knowledge log entry written', err);
-        });
-        var div = document.querySelector(
-            '.episode[name='+ model.pkg.name +']'
-        );
-        console.log('history.visited', history.visited());
-        console.log('inventory.knowledge', inventory.knowledge());
-        insertMenuIntoEpisode(div);
     });
 
     e.on('aborted_episode', function(model) {
         console.log('user aborted', model.pkg.name);
         makeEpisodeLogEntry('aborted_episode', model, function(err){
             console.log('aborting the episode did not work: '+ err);
+            var episodeDiv = document.querySelector(
+                '.episode[name='+ model.pkg.name +']'
+            );
+            episodeDiv.parentElement.removeChild(episodeDiv);
+            var lastEpisodeDiv = _.last(document.querySelectorAll('.episode'));
+            var lastEpisodeName = lastEpisodeDiv.getAttribute('name');
+            console.log('history.visited', history.visited());
+            console.log('inventory.knowledge', inventory.knowledge());
+            insertMenuIntoEpisode(lastEpisodeDiv);
         });
-        var episodeDiv = document.querySelector(
-            '.episode[name='+ model.pkg.name +']'
-        );
-        episodeDiv.parentElement.removeChild(episodeDiv);
-        var lastEpisodeDiv = _.last(document.querySelectorAll('.episode'));
-        var lastEpisodeName = lastEpisodeDiv.getAttribute('name');
-        console.log('history.visited', history.visited());
-        console.log('inventory.knowledge', inventory.knowledge());
-        insertMenuIntoEpisode(lastEpisodeDiv);
     });
 
     e.on('episode_chosen', function(e) {
