@@ -1,6 +1,7 @@
 // third-party
 var _ = require('lodash');
 var Spinner = require('spin');
+var liveStream = require('level-live-stream');
 
 // third party (db)
 var levelup = require('levelup');
@@ -61,10 +62,7 @@ function init(config) {
                 if (err) return;
                 //history.appendEpisode(model);
                 scrollToEpisode(model.pkg.name);
-                makeEpisodeLogEntry("started_episode", model, function(err) {
-                    console.log('PUT', err);
-                    if (cb) cb(null);
-                });
+                if (cb) cb(null);
             }
         );
     }
@@ -161,7 +159,37 @@ function init(config) {
     e.once('end_episode_discovery', function(toc) {
         TOC = toc;
         console.log('episode discovery done.');
-        loadAndAppendEpisode(TOC.intro);
+
+        // on episode_started log-entry, load episode
+        var stream = liveStream(logdb, {tail:true, min: "\x00", max:"\xff"});
+        stream.on('data', function(data) {
+            var logEntry = JSON.parse(data.value);
+            var name;
+            if (logEntry.action === "started_episode") {
+                name = logEntry.pkg.name;
+                var model = TOC[name];
+                if (!model) {
+                    console.log('Started non-existing episode(!)');
+                } else {
+                    loadAndAppendEpisode(model);
+                }
+            } else if (logEntry.action === "aborted_episode") {
+                name = logEntry.pkg.name;
+                var episodeDiv = document.querySelector(
+                    '.episode[name='+ name +']'
+                );
+                episodeDiv.parentElement.removeChild(episodeDiv);
+            }
+        });
+
+        if (!localStorage.getItem('intro')) { // TODO: logdb is empty
+            makeEpisodeLogEntry("started_episode", TOC.intro, function(err) {
+                console.log('PUT', err);
+                if (!err) {
+                    localStorage.setItem('intro', 'true');
+                }
+            });
+        }
     });
 
     e.on('history_clicked', function(episode) {
@@ -191,7 +219,6 @@ function init(config) {
             var episodeDiv = document.querySelector(
                 '.episode[name='+ model.pkg.name +']'
             );
-            episodeDiv.parentElement.removeChild(episodeDiv);
             var lastEpisodeDiv = _.last(document.querySelectorAll('.episode'));
             var lastEpisodeName = lastEpisodeDiv.getAttribute('name');
             console.log('history.visited', history.visited());
@@ -212,7 +239,9 @@ function init(config) {
             return o.pkg.name === model.pkg.name;
         })) {
             e.menu.parentElement.removeChild(e.menu);
-            loadAndAppendEpisode(model);
+            makeEpisodeLogEntry("started_episode", model, function(err) {
+                console.log('PUT', err);
+            });
         } else {
             // TODO: display 'you are not ready yet'
         }
