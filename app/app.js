@@ -8,8 +8,6 @@ var leveldown = require('level-js');
 var sublevel = require('level-sublevel');
 
 // helpers
-
-
 var scrollToY = function(y) {
     require('scroll-to-y')(y, 1500, 'easeInOutQuint');
 };
@@ -17,7 +15,7 @@ var scrollToY = function(y) {
 function scrollToEpisode(name) {
     var el = document.querySelector('.episode[name=' + name + ']');
     var ypos = el.offsetTop;
-    scrollToY(ypos); 
+    scrollToY(ypos);
 }
 
 function ensureVisible(el) {
@@ -31,7 +29,7 @@ function ensureVisible(el) {
     if (deltaBottom > 0) {
         scrollToY(window.scrollY + deltaBottom);
     } else if (bounds.top < 0) {
-        scrollToY(window.scrollY + boundsTop);
+        scrollToY(window.scrollY + bounds.top);
     }
 }
 
@@ -40,7 +38,7 @@ function init(config) {
         config = {};
     }
     _.defaults(config, {
-        tracks: process.env.tracks, 
+        tracks: process.env.tracks,
         github_organisation: process.env.github_organisation
     });
     var EventEmitter = require('events').EventEmitter;
@@ -51,14 +49,14 @@ function init(config) {
     var episode = require('episode/episode');
     var appendMenu = require('menu/menu').appendMenu;
     var bpm = require('brainpm');
-    
+
     // app-specific UI components
     var topbar = require('topbar/topbar')('.topbar');
 
     function loadAndAppendEpisode(model) {
         var container = document.querySelector('.content');
         episode.appendEpisode(
-            container, model, 
+            container, model,
             function(err) {
                 if (err) return;
                 //history.appendEpisode(model);
@@ -88,7 +86,7 @@ function init(config) {
     }, function() {
         logdb = sublevel(db, 'log');
         history = require('history/history')(
-            '.sidebar .history ul', 
+            '.sidebar .history ul',
             logdb
         );
         inventory = require('inventory/inventory')(
@@ -96,15 +94,15 @@ function init(config) {
             logdb
         );
     });
-    
+
     function makeEpisodeLogEntry(action, model, cb) {
         logdb.put(
             (new Date()).toISOString(),
             JSON.stringify({
                 action: action,
                 pkg: {
-                    name: model.pkg.name, 
-                    version: model.pkg.version, 
+                    name: model.pkg.name,
+                    version: model.pkg.version,
                     description: model.pkg.description,
                     brain: model.pkg.brain
                 }
@@ -119,16 +117,28 @@ function init(config) {
          var batch = model.pkg.brain.provides.map(function(item) {
             console.log ("added " + item + " to database");
             return {
-                type: 'put', 
-                key: date+((i++).toString(16)), 
+                type: 'put',
+                key: date+((i++).toString(16)),
                 value: JSON.stringify({
-                    action: "knowledge_acquired", 
+                    action: "knowledge_acquired",
                     provides: item
                 })
             };
          });
         logdb.batch(batch, cb);
     }
+
+    function insertMenuIntoEpisode(episodeDiv) {
+        var menu = appendMenu(
+            episodeDiv,
+            TOC,
+            history.visited(),
+            inventory.knowledge(),
+            TRACKS, TRACK_NAMES, 4
+        );
+        ensureVisible(menu);
+    }
+
     //
     // -- add event listeners
     //
@@ -136,7 +146,7 @@ function init(config) {
 
     e.on('start_episode_discovery', function() {
         discoverySpinner = new Spinner({
-            color:'#111', 
+            color:'#111',
             lines: 12
         });
         var container = document.querySelector('.container');
@@ -168,14 +178,25 @@ function init(config) {
         var div = document.querySelector(
             '.episode[name='+ model.pkg.name +']'
         );
-        appendMenu(
-            div, 
-            TOC, 
-            history.visited(), 
-            inventory.knowledge(), 
-            TRACKS, TRACK_NAMES, 4
-        ); 
-        ensureVisible(div);
+        console.log('history.visited', history.visited());
+        console.log('inventory.knowledge', inventory.knowledge());
+        insertMenuIntoEpisode(div);
+    });
+
+    e.on('aborted_episode', function(model) {
+        console.log('user aborted', model.pkg.name);
+        makeEpisodeLogEntry('aborted_episode', model, function(err){
+            console.log('aborting the episode did not work: '+ err);
+        });
+        var episodeDiv = document.querySelector(
+            '.episode[name='+ model.pkg.name +']'
+        );
+        episodeDiv.parentElement.removeChild(episodeDiv);
+        var lastEpisodeDiv = _.last(document.querySelectorAll('.episode'));
+        var lastEpisodeName = lastEpisodeDiv.getAttribute('name');
+        console.log('history.visited', history.visited());
+        console.log('inventory.knowledge', inventory.knowledge());
+        insertMenuIntoEpisode(lastEpisodeDiv);
     });
 
     e.on('episode_chosen', function(e) {
@@ -183,7 +204,7 @@ function init(config) {
         console.log('user chose', model.pkg.name);
         // is this a valid option?
         var options = bpm.getOptions(
-            TOC, 
+            TOC,
             inventory.knowledge()
         );
         if (_.some(options, function(o) {
@@ -192,7 +213,7 @@ function init(config) {
             e.menu.parentElement.removeChild(e.menu);
             loadAndAppendEpisode(model);
         } else {
-            // TODO: display 'you are not ready yet' 
+            // TODO: display 'you are not ready yet'
         }
     });
 }
