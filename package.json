@@ -25,6 +25,7 @@
   "dependencies": {
     "brainpm": "2.x.x",
     "events": "^1.0.2",
+    "github-url": "^1.2.0",
     "level-js": "^2.1.6",
     "level-live-stream": "^1.4.9",
     "level-sublevel": "^6.4.6",

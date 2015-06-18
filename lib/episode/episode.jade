@@ -3,6 +3,10 @@ i.bookmark.fa.fa-bookmark.fa-3x
     span.name= model.pkg.name + " version " + model.pkg.version
     span.author=  "written by " + model.pkg.author.replace(/\s+<.*/,'')
     span.updated_at= "last updated " + moment(model.repo.updated_at).fromNow()
+    if gitHubPage
+        span.git_hub_page
+            a(href=gitHubPage, target="_blank")
+                i.fa.fa-github
 .body
 .footer
     span.license= "license: " + model.pkg.license + " " + moment(model.repo.updated_at).format("YYYY")
