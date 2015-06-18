@@ -1,12 +1,13 @@
 // third-party
 var _ = require('lodash');
 var Spinner = require('spin');
-var liveStream = require('level-live-stream');
 
 // third party (db)
 var levelup = require('levelup');
 var leveldown = require('level-js');
 var sublevel = require('level-sublevel');
+var liveStream = require('level-live-stream');
+var isEmpty = require('level-is-empty');
 
 // helpers
 var scrollToY = function(y) {
@@ -182,14 +183,17 @@ function init(config) {
             }
         });
 
-        if (!localStorage.getItem('intro')) { // TODO: logdb is empty
-            makeEpisodeLogEntry("started_episode", TOC.intro, function(err) {
-                console.log('PUT', err);
-                if (!err) {
-                    localStorage.setItem('intro', 'true');
-                }
-            });
-        }
+        isEmpty(logdb, function(err, empty) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            if (empty) {
+                makeEpisodeLogEntry("started_episode", TOC.intro, function(err) {
+                    console.log('PUT', err);
+                });
+            }
+        });
     });
 
     e.on('history_clicked', function(episode) {
