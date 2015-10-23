@@ -47,7 +47,6 @@ function init(config) {
     window.events = new EventEmitter();
     //
     // app-specific modules
-    require('discover/discover')(config.github_organisation);
     var episode = require('episode/episode');
     var appendMenu = require('menu/menu').appendMenu;
     var bpm = require('brainpm');
@@ -195,6 +194,8 @@ function init(config) {
             }
         });
     });
+
+    require('discover/discover')(config.github_organisation);
 
     e.on('history_clicked', function(episode) {
         console.log('history click on', episode.pkg.name);
