@@ -43,5 +43,19 @@
     "scroll-to-y": "^1.0.0",
     "spin": "0.0.1",
     "through": "^2.3.8"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brainpm/bpm-webplayer.git"
+  },
+  "keywords": [
+    "bpm",
+    "brainpm",
+    "learning",
+    "environment"
+  ],
+  "bugs": {
+    "url": "https://github.com/brainpm/bpm-webplayer/issues"
+  },
+  "homepage": "https://github.com/brainpm/bpm-webplayer#readme"
 }
