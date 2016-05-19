@@ -11,8 +11,7 @@ in it.
 Run the development server
 ```
 npm install
-make
-npm run server
+npm start
 ```
 
 and navigate your browser to the link mentioned by the server.
