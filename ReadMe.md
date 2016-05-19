@@ -3,7 +3,7 @@ bpm web player
 
 Make sure to have a `.bpmrc` file in your home that has the line
 ```
-github_organisation=<github organisation that own content repositories>
+github_organisation=shecodes-content
 tracks="yellow:Science & History::black:Engineering::blue:Collaboration"
 ```
 in it.
