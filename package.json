@@ -23,7 +23,11 @@
     "stylus": "^0.50.0"
   },
   "dependencies": {
+    "JSONStream": "^1.1.1",
+    "bpm-publish": "^3.2.0",
+    "bpm-bundle": "^2.1.0",
     "brainpm": "2.x.x",
+    "concat-stream": "^1.5.1",
     "events": "^1.0.2",
     "github-url": "^1.2.0",
     "level-is-empty": "^1.0.0",
@@ -32,10 +36,12 @@
     "level-sublevel": "^6.4.6",
     "levelup": "^0.19.0",
     "lodash": "^3.6.0",
+    "map-stream": "0.0.6",
     "moment": "^2.9.0",
     "pull-stream": "^2.28.4",
     "raf-scroll": "^1.0.1",
     "scroll-to-y": "^1.0.0",
-    "spin": "0.0.1"
+    "spin": "0.0.1",
+    "through": "^2.3.8"
   }
 }
